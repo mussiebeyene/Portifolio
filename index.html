@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#ffffff" />
+    <title>Mussie Beyene</title>
+    <link rel="icon" href="assets/avatar.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Ethiopic:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <div id="app" class="view-landing">
+      <button class="back" type="button" id="backBtn" hidden>
+        ← menu
+      </button>
+
+      <div class="stage" id="stage">
+        <button class="avatar-btn" id="avatarBtn" type="button" aria-label="Open menu">
+          <span class="avatar-ring" aria-hidden="true"></span>
+          <span class="avatar-crop">
+            <img class="avatar" src="assets/avatar.jpg" alt="Mussie Beyene" width="168" height="168" />
+          </span>
+        </button>
+
+        <div class="identity" id="identity">
+          <h1 class="name" id="name"></h1>
+          <p class="role" id="role"></p>
+          <p class="click-hint">click</p>
+        </div>
+
+        <div class="tree" id="tree" hidden>
+          <svg class="tree-svg" viewBox="0 0 800 160" preserveAspectRatio="xMidYMin meet" aria-hidden="true">
+            <path class="tree-path" d="M400 0 C400 70 140 90 140 150" />
+            <path class="tree-path" d="M400 0 L400 150" />
+            <path class="tree-path" d="M400 0 C400 70 660 90 660 150" />
+          </svg>
+          <nav class="tree-nav" aria-label="Primary">
+            <button type="button" data-view="about">ABOUT ME</button>
+            <button type="button" data-view="resume">RESUME</button>
+            <button type="button" data-view="projects">PROJECTS</button>
+          </nav>
+        </div>
+      </div>
+
+      <main class="page" id="page" hidden></main>
+
+      <footer class="socials" id="socials" hidden>
+        <a id="githubLink" aria-label="GitHub" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="M12 2C6.48 2 2 6.58 2 12.26c0 4.52 2.87 8.35 6.84 9.71.5.1.68-.22.68-.49 0-.24-.01-.87-.01-1.71-2.78.62-3.37-1.37-3.37-1.37-.45-1.18-1.11-1.5-1.11-1.5-.91-.64.07-.63.07-.63 1 .07 1.53 1.06 1.53 1.06.9 1.57 2.36 1.12 2.94.86.09-.67.35-1.12.63-1.37-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.27 2.75 1.05A9.3 9.3 0 0 1 12 6.84c.85 0 1.71.12 2.51.35 1.9-1.32 2.74-1.05 2.74-1.05.55 1.41.2 2.45.1 2.71.65.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.8-4.57 5.06.36.32.68.94.68 1.9 0 1.37-.01 2.47-.01 2.81 0 .27.18.59.69.49A10.03 10.03 0 0 0 22 12.26C22 6.58 17.52 2 12 2Z"
+            />
+          </svg>
+        </a>
+        <a id="linkedinLink" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="M6.94 8.5H3.75V20h3.19V8.5ZM5.34 3.5A1.85 1.85 0 1 0 5.35 7.2 1.85 1.85 0 0 0 5.34 3.5ZM20.25 20h-3.18v-5.6c0-1.34-.02-3.06-1.86-3.06-1.87 0-2.16 1.45-2.16 2.96V20h-3.18V8.5h3.05v1.57h.04c.42-.8 1.46-1.65 3.01-1.65 3.22 0 3.81 2.12 3.81 4.87V20Z"
+            />
+          </svg>
+        </a>
+        <a id="emailLink" aria-label="Email">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="M3.5 6.75A2.25 2.25 0 0 1 5.75 4.5h12.5A2.25 2.25 0 0 1 20.5 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25H5.75A2.25 2.25 0 0 1 3.5 17.25V6.75Zm1.7.5 6.55 4.7a.4.4 0 0 0 .5 0l6.55-4.7H5.2Zm13.3 1.66-6.28 4.51a1.9 1.9 0 0 1-2.24 0L3.7 8.91v8.34c0 .14.11.25.25.25h16.1a.25.25 0 0 0 .25-.25V8.91Z"
+            />
+          </svg>
+        </a>
+      </footer>
+    </div>
+
+    <script src="js/content.js"></script>
+    <script src="js/app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,14 @@
+.DS_Store
+.vscode/
+.idea/
+
+# Camera originals. The site loads the optimized copies in
+# assets/hobbies and assets/projects instead.
+# Named individually because macOS matches these patterns
+# case-insensitively, which would also catch avatar.jpg.
+assets/01.JPG
+assets/02.JPG
+assets/03.JPG
+assets/04.JPG
+assets/05.MOV
+assets/projects/proj1_vid.mp4
