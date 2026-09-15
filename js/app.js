@@ -14,6 +14,27 @@ const views = new Set(["landing", "menu", "about", "resume", "projects"]);
 
 let tiktokIndex = 0;
 let commitCache = null;
+let typewriterTimer = null;
+
+const NOW_HEADING = "What I am currently working on";
+
+const STACK_COLORS = [
+  { bg: "#ffe08a", border: "#c9a227" },
+  { bg: "#9ad7ff", border: "#3a8fc4" },
+  { bg: "#b8f2c8", border: "#3d9a5f" },
+  { bg: "#ffc2d4", border: "#d45a7a" },
+  { bg: "#e0c8ff", border: "#8a5cc8" },
+  { bg: "#ffd4a8", border: "#d47a2c" },
+];
+
+function stackColors(count) {
+  const palette = STACK_COLORS.slice();
+  for (let i = palette.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [palette[i], palette[j]] = [palette[j], palette[i]];
+  }
+  return Array.from({ length: count }, (_, i) => palette[i % palette.length]);
+}
 
 function currentView() {
   const hash = (location.hash || "#/").replace(/^#\/?/, "");
@@ -255,8 +276,10 @@ function journalHtml() {
     .join("");
 
   return `
-    <h3 class="progress-heading">Daily Journal</h3>
-    <div class="journal-grid">${cards}</div>
+    <section class="journal">
+      <h3 class="progress-heading">Daily Journal</h3>
+      <div class="journal-grid">${cards}</div>
+    </section>
   `;
 }
 
@@ -352,75 +375,115 @@ function nowHtml() {
   const project = content.current;
   const repoUrl = project.repo ? `https://github.com/${project.repo}` : "";
   const title = escapeHtml(project.title);
+  const colors = stackColors((project.stack || []).length);
 
   return `
-    <h2 class="now-heading">What I am currently working on</h2>
+    <h2 class="now-heading" aria-label="${escapeHtml(NOW_HEADING)}">
+      <span class="now-heading-ghost" aria-hidden="true">${escapeHtml(NOW_HEADING)}</span>
+      <span class="now-heading-typed" aria-hidden="true">
+        <span class="now-heading-text"></span><span class="now-heading-caret"></span>
+      </span>
+    </h2>
     <h3 class="now-title">${
       repoUrl
         ? `<a href="${escapeHtml(repoUrl)}" target="_blank" rel="noopener noreferrer">${title}</a>`
         : title
     }</h3>
 
-    <div class="now-grid">
-      <div class="bracket now-overview">
-        <p class="section-label">Overview</p>
-        <p>${escapeHtml(project.overview)}</p>
-        ${
-          (project.features || []).length
-            ? `<p class="section-label">Features</p>
-               <ul class="now-features">
-                 ${project.features
-                   .map((item) => `<li>${escapeHtml(item)}</li>`)
-                   .join("")}
-               </ul>`
-            : ""
-        }
-        ${
-          (project.stack || []).length
-            ? `<ul class="card-stack now-stack">
-                 ${project.stack
-                   .map((tech) => `<li>${escapeHtml(tech)}</li>`)
-                   .join("")}
-               </ul>`
-            : ""
-        }
-      </div>
-      <div class="now-sketches">
-        ${(project.sketches || [])
-          .map(
-            (sketch) => `
-              <figure class="bracket now-sketch">
-                <button type="button" class="sketch-open" data-sketch="${escapeHtml(sketch.src)}"
-                        aria-label="Enlarge ${escapeHtml(sketch.caption)}">
-                  <img src="${escapeHtml(sketch.src)}" alt="${escapeHtml(sketch.caption)}" />
-                </button>
-                <figcaption>${escapeHtml(sketch.caption)} — click to enlarge</figcaption>
-              </figure>`
-          )
-          .join("")}
-      </div>
-    </div>
-
-    <h3 class="progress-heading">Progress</h3>
-
-    <div class="progress-grid">
-      <div class="feed">
-        <p class="section-label">Feed</p>
-        <ol class="feed-list"></ol>
-        <p class="feed-status"></p>
-      </div>
-      <aside class="progress-side">
-        ${lockHtml()}
+    <div class="now-body">
+      <div class="now-left">
+        <div class="bracket now-overview">
+          <p class="section-label">Overview</p>
+          <p>${escapeHtml(project.overview)}</p>
+          ${
+            (project.features || []).length
+              ? `<p class="section-label">Features</p>
+                 <ul class="now-features">
+                   ${project.features
+                     .map((item) => `<li>${escapeHtml(item)}</li>`)
+                     .join("")}
+                 </ul>`
+              : ""
+          }
+          ${
+            (project.stack || []).length
+              ? `<ul class="card-stack now-stack">
+                   ${project.stack
+                     .map((tech, i) => {
+                       const color = colors[i];
+                       return `<li style="background:${color.bg};border-color:${color.border}">${escapeHtml(tech)}</li>`;
+                     })
+                     .join("")}
+                 </ul>`
+              : ""
+          }
+        </div>
+        <h3 class="progress-heading">Progress</h3>
+        <div class="feed">
+          <p class="section-label">Feed</p>
+          <ol class="feed-list"></ol>
+          <p class="feed-status"></p>
+        </div>
         ${journalHtml()}
+      </div>
+      <aside class="now-right">
+        <div class="now-sketches">
+          ${(project.sketches || [])
+            .map(
+              (sketch) => `
+                <figure class="bracket now-sketch">
+                  <button type="button" class="sketch-open" data-sketch="${escapeHtml(sketch.src)}"
+                          aria-label="Enlarge ${escapeHtml(sketch.caption)}">
+                    <img src="${escapeHtml(sketch.src)}" alt="${escapeHtml(sketch.caption)}" />
+                  </button>
+                  <figcaption>${escapeHtml(sketch.caption)} — click to enlarge</figcaption>
+                </figure>`
+            )
+            .join("")}
+        </div>
+        ${lockHtml()}
+        ${tiktokHtml()}
       </aside>
     </div>
-
-    ${tiktokHtml()}
   `;
+}
+
+function stopTypewriter() {
+  if (typewriterTimer) {
+    clearTimeout(typewriterTimer);
+    typewriterTimer = null;
+  }
+}
+
+function startTypewriter() {
+  stopTypewriter();
+  const textEl = now.querySelector(".now-heading-text");
+  if (!textEl) return;
+
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    textEl.textContent = NOW_HEADING;
+    return;
+  }
+
+  let i = 0;
+  textEl.textContent = "";
+
+  const tick = () => {
+    i += 1;
+    textEl.textContent = NOW_HEADING.slice(0, i);
+    if (i < NOW_HEADING.length) {
+      typewriterTimer = setTimeout(tick, 48);
+    } else {
+      typewriterTimer = null;
+    }
+  };
+
+  typewriterTimer = setTimeout(tick, 320);
 }
 
 function renderNow() {
   now.innerHTML = nowHtml();
+  startTypewriter();
   loadFeed();
 }
 
@@ -444,6 +507,7 @@ function render(view) {
     requestAnimationFrame(drawTree);
     renderNow();
   } else {
+    stopTypewriter();
     now.innerHTML = "";
   }
 

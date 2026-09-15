@@ -26,16 +26,16 @@ const content = {
   },
 
   resume: {
-    file: "assets/Latest Resume.pdf",
+    file: "assets/Latest Resume (1) copy.pdf",
     preview: "assets/resume-preview.jpg",
   },
 
   current: {
     // "owner/repo" — the feed pulls live commits from here.
     repo: "mussiebeyene/PutYouOn",
-    title: "PutYouOn",
+    title: "PutYouOn☕️😛",
     overview:
-      "Find cafes based on your vibe, work setup, noise level, seating, outlets, WiFi, and what your friends recommend.",
+      "A cafe finder that filters spots based on your vibe, work setup, noise level, seating, outlets, WiFi, and what your friends recommend. ",
 
     features: [
       "Preference matching",
@@ -47,8 +47,8 @@ const content = {
     stack: ["React", "Google Maps API", "Supabase", "OpenAI API"],
 
     sketches: [
-      { src: "assets/current/sketch-1.svg", caption: "Sketch" },
-      { src: "assets/current/sketch-2.svg", caption: "Sketch" },
+      { src: "assets/current/IMG_0626.jpg", caption: "Sketch" },
+      { src: "assets/current/899.jpg", caption: "Sketch" },
     ],
 
     // The lock fills as these get marked done. Flip done to true as you go.
@@ -75,25 +75,33 @@ const content = {
       {
         date: "2026-09-14",
         title: "Picking the stack",
-        text: "Went back and forth between Firebase and Supabase and landed on Supabase, mostly because I want real SQL for the cafe and recommendation tables. Postgres row level security also means friend recs can stay private without me hand-rolling permissions.",
+        text: "For my current project, I got the inspiration from @itsellagonzales on IG. The stacks to be used are a rough draft so far with some changes here and there. ",
       },
       {
         date: "2026-09-13",
-        title: "The noise problem",
-        text: "The hard part isn't the map, it's the data. Nobody publishes whether a cafe is loud at 3pm on a Tuesday. Thinking the first version leans on friend submissions, then uses the AI pass to turn messy notes into the studying / working / dates labels.",
+        title: "My day today",
+        text: "It wasnt much happening to be honest. Understood that sleep is a non negotiable when it comes to work and productivity.",
       },
       {
         date: "2026-09-12",
         title: "Why I'm building this",
-        text: "I've spent too many afternoons walking into a cafe with my laptop only to find no outlets and one tiny table. If I can get this right for UCLA and Santa Monica first, it should generalize anywhere.",
+        text: "I've spent too many afternoons walking into a cafe with my laptop only to find no outlets and one tiny table. So I definitly need this app to help me find the perfect spot to work from.",
       },
     ],
 
     // Full TikTok post URLs. Day labels come from the order.
     tiktoks: [
       {
-        day: 1,
+        day: 3,
         url: "https://www.tiktok.com/@mooselocksin/photo/7685279464602832158",
+      },
+      {
+        day: 2,
+        url: "https://www.tiktok.com/@mooselocksin/photo/7684886452911557918",
+      },
+      {
+        day: 1,
+        url: "https://www.tiktok.com/@mooselocksin/photo/7684538444009213197",
       },
     ],
   },
