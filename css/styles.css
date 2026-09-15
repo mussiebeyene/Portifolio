@@ -234,6 +234,456 @@ img {
   padding: 88px 0 120px;
 }
 
+/* Sits below the absolutely positioned avatar and tree on the menu view. */
+.now {
+  position: relative;
+  z-index: 1;
+  width: min(1040px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 300px 0 140px;
+}
+
+.now-heading {
+  margin: 0;
+  font-size: clamp(22px, 3.4vw, 34px);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  line-height: 1.25;
+}
+
+.now-title {
+  margin: 14px 0 36px;
+  text-align: center;
+  font-size: 19px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.bracket {
+  position: relative;
+  padding: 18px 26px;
+}
+
+.bracket::before,
+.bracket::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 12px;
+  border: 1px solid var(--fg);
+  pointer-events: none;
+}
+
+.bracket::before {
+  left: 0;
+  border-right: 0;
+}
+
+.bracket::after {
+  right: 0;
+  border-left: 0;
+}
+
+.now-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 230px;
+  gap: 36px;
+  align-items: start;
+}
+
+.now-overview > p {
+  font-size: 14px;
+}
+
+.now-overview .section-label:not(:first-child) {
+  margin-top: 22px;
+}
+
+.now-features {
+  margin: 0;
+  padding-left: 20px;
+  font-size: 13px;
+}
+
+.now-features li {
+  margin-bottom: 4px;
+}
+
+/* Scoped to beat the .card-stack margin reset defined further down. */
+.now-overview .now-stack {
+  margin-top: 20px;
+}
+
+.now-sketches {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.now-sketch {
+  margin: 0;
+}
+
+/* Slimmer than the overview bracket so both sketches fit beside it. */
+.now-sketch.bracket {
+  padding: 10px 14px;
+}
+
+.sketch-open {
+  display: block;
+  width: 100%;
+  cursor: zoom-in;
+}
+
+/* Capped so both sketches fit beside the overview. Click to see them full size. */
+.now-sketch img {
+  width: 100%;
+  height: 100px;
+  object-fit: contain;
+  background: var(--fill);
+  border: 1px solid var(--fg);
+  transition: opacity 0.2s ease;
+}
+
+.sketch-open:hover img {
+  opacity: 0.82;
+}
+
+.now-sketch figcaption {
+  margin-top: 6px;
+  text-align: center;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.now-sketches > :nth-child(even) {
+  margin-left: 14px;
+}
+
+.progress-heading {
+  margin: 56px 0 20px;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+}
+
+.progress-grid {
+  /* TikTok's player refuses to render below 325px, so the side column
+     is wide enough to hold it at full size. */
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 36px;
+  align-items: start;
+}
+
+.feed {
+  border: 1px solid var(--fg);
+  padding: 18px 20px 20px;
+  min-height: 420px;
+}
+
+.feed-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.feed-item {
+  display: grid;
+  grid-template-columns: 68px minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: baseline;
+  padding: 10px 0;
+  border-top: 1px solid #e4e4e4;
+}
+
+.feed-item:first-child {
+  border-top: 0;
+}
+
+.feed-sha {
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  text-decoration: none;
+}
+
+a.feed-sha:hover {
+  color: var(--fg);
+  text-decoration: underline;
+}
+
+.feed-item.is-note .feed-sha {
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+}
+
+.feed-text {
+  margin: 0;
+  font-size: 13px;
+}
+
+.feed-item.is-note .feed-text {
+  color: var(--fg);
+}
+
+.feed-when {
+  font-size: 11px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.feed-status {
+  margin: 14px 0 0;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.feed-status:empty {
+  display: none;
+}
+
+.progress-side {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  align-items: center;
+}
+
+.lock-wrap {
+  width: 100%;
+  text-align: center;
+}
+
+.lock {
+  width: 108px;
+  height: auto;
+}
+
+.lock-shackle,
+.lock-body {
+  fill: none;
+  stroke: var(--fg);
+  stroke-width: 4;
+}
+
+.lock-shackle {
+  transition: transform 0.5s ease;
+  transform-origin: 42px 60px;
+}
+
+.lock.is-unlocked .lock-shackle {
+  transform: rotate(-22deg) translateY(-2px);
+}
+
+.lock-fill {
+  fill: var(--fg);
+  opacity: 0.14;
+  transition: y 0.6s ease, height 0.6s ease;
+}
+
+.lock.is-unlocked .lock-fill {
+  opacity: 0.28;
+}
+
+.lock-keyhole {
+  fill: none;
+  stroke: var(--fg);
+  stroke-width: 3;
+}
+
+.lock-count {
+  margin: 10px 0 0;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+}
+
+.lock-list {
+  display: inline-block;
+  margin: 14px 0 0;
+  padding: 0;
+  list-style: none;
+  text-align: left;
+}
+
+.lock-list li {
+  position: relative;
+  padding-left: 20px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.lock-list li::before {
+  content: "○";
+  position: absolute;
+  left: 0;
+}
+
+.lock-list li.is-done {
+  color: var(--fg);
+}
+
+.lock-list li.is-done::before {
+  content: "●";
+}
+
+.tiktok {
+  width: 100%;
+  text-align: center;
+}
+
+.tiktok-day {
+  margin: 0 0 8px;
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.tiktok-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 12px;
+}
+
+.tiktok-row button {
+  width: 32px;
+  height: 32px;
+  flex: none;
+  border: 1px solid var(--fg);
+  border-radius: 50%;
+  font-size: 10px;
+  line-height: 1;
+}
+
+.tiktok-row button:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.tiktok-count {
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+}
+
+.tiktok-frame {
+  width: 100%;
+  height: 620px;
+  border: 1px solid var(--fg);
+  background: var(--fill);
+  overflow: hidden;
+}
+
+.tiktok-frame iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
+.tiktok-frame.is-empty {
+  display: grid;
+  place-items: center;
+  padding: 16px;
+}
+
+.tiktok-frame.is-empty p,
+.tiktok-bad {
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+.tiktok-caption {
+  display: block;
+  margin-top: 12px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+a.tiktok-caption {
+  text-decoration: none;
+  border-bottom: 1px dotted var(--muted);
+}
+
+a.tiktok-caption:hover {
+  color: var(--fg);
+  border-bottom-color: var(--fg);
+}
+
+.journal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+}
+
+.journal-entry {
+  border: 1px solid var(--fg);
+  padding: 18px 20px 20px;
+}
+
+.journal-date {
+  margin: 0;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.journal-entry h4 {
+  margin: 10px 0 8px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.journal-text {
+  margin: 0;
+  font-size: 13px;
+}
+
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: grid;
+  place-items: center;
+  padding: 32px;
+  background: rgba(255, 255, 255, 0.97);
+  cursor: zoom-out;
+}
+
+.lightbox img {
+  max-width: min(1100px, 100%);
+  max-height: 100%;
+  border: 1px solid var(--fg);
+  background: var(--bg);
+  cursor: default;
+}
+
+.lightbox-close {
+  position: absolute;
+  top: 18px;
+  right: 24px;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--fg);
+  border-radius: 50%;
+  background: var(--bg);
+  font-size: 20px;
+  line-height: 1;
+}
+
 .page-title {
   margin: 0 0 40px;
   text-align: center;
@@ -457,6 +907,8 @@ img {
   border-radius: 50%;
   display: grid;
   place-items: center;
+  /* Opaque so scrolling content doesn't show through the icons. */
+  background: var(--bg);
 }
 
 .socials a:hover {
@@ -523,7 +975,7 @@ img {
 
 @media (hover: none) {
   .socials a:hover {
-    background: none;
+    background: var(--bg);
   }
 
   .socials a:hover svg {
@@ -541,6 +993,64 @@ img {
 }
 
 @media (max-width: 720px) {
+  .now {
+    width: min(1040px, calc(100% - 40px));
+    padding: 240px 0 150px;
+  }
+
+  .now-grid,
+  .progress-grid {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .now-sketches > :nth-child(even) {
+    margin-left: 0;
+  }
+
+  .now-sketch {
+    max-width: 320px;
+    margin: 0 auto;
+  }
+
+  .now-sketch img {
+    height: 150px;
+  }
+
+  .feed {
+    min-height: 0;
+  }
+
+  .feed-item {
+    grid-template-columns: 60px minmax(0, 1fr);
+  }
+
+  .feed-when {
+    grid-column: 2;
+  }
+
+  .progress-side {
+    gap: 32px;
+  }
+
+  .tiktok {
+    max-width: 340px;
+    margin: 0 auto;
+  }
+
+  .tiktok-frame {
+    height: 560px;
+  }
+
+  .lightbox {
+    padding: 16px;
+  }
+
+  .lightbox-close {
+    top: 10px;
+    right: 12px;
+  }
+
   .view-landing {
     --avatar-size: 140px;
     --avatar-top: calc(50dvh - 135px);

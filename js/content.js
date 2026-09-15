@@ -7,7 +7,7 @@ const content = {
 
   social: {
     github: "https://github.com/mussiebeyene",
-    linkedin: "https://https://www.linkedin.com/in/mussie-beyene-155014306/",
+    linkedin: "https://www.linkedin.com/in/mussie-beyene-155014306/",
     email: "mussieyonatan3@gmail.com",
   },
 
@@ -28,6 +28,74 @@ const content = {
   resume: {
     file: "assets/Latest Resume.pdf",
     preview: "assets/resume-preview.jpg",
+  },
+
+  current: {
+    // "owner/repo" — the feed pulls live commits from here.
+    repo: "mussiebeyene/PutYouOn",
+    title: "AI Cafe Finder",
+    overview:
+      "Find cafes based on your vibe, work setup, noise level, seating, outlets, WiFi, and what your friends recommend.",
+
+    features: [
+      "Preference matching",
+      "Friend recs",
+      "Map filters",
+      "\"Best for studying / working / dates\" labels",
+    ],
+
+    stack: ["React", "Google Maps API", "Supabase", "OpenAI API"],
+
+    sketches: [
+      { src: "assets/current/sketch-1.svg", caption: "Sketch" },
+      { src: "assets/current/sketch-2.svg", caption: "Sketch" },
+    ],
+
+    // The lock fills as these get marked done. Flip done to true as you go.
+    milestones: [
+      { label: "Scope and sketches", done: false },
+      { label: "Cafe data model", done: false },
+      { label: "Maps + filters", done: false },
+      { label: "Preference matching", done: false },
+      { label: "Friend recs", done: false },
+      { label: "AI labels", done: false },
+      { label: "Ship v1", done: false },
+    ],
+
+    // Your own written updates. These merge with live commits in the feed.
+    notes: [
+      {
+        date: "2026-09-14",
+        text: "Scoping the cafe finder — settling on React with Supabase for data and the Google Maps API for the filterable map view.",
+      },
+    ],
+
+    // Placeholder entries — rewrite these in your own voice.
+    journal: [
+      {
+        date: "2026-09-14",
+        title: "Picking the stack",
+        text: "Went back and forth between Firebase and Supabase and landed on Supabase, mostly because I want real SQL for the cafe and recommendation tables. Postgres row level security also means friend recs can stay private without me hand-rolling permissions.",
+      },
+      {
+        date: "2026-09-13",
+        title: "The noise problem",
+        text: "The hard part isn't the map, it's the data. Nobody publishes whether a cafe is loud at 3pm on a Tuesday. Thinking the first version leans on friend submissions, then uses the AI pass to turn messy notes into the studying / working / dates labels.",
+      },
+      {
+        date: "2026-09-12",
+        title: "Why I'm building this",
+        text: "I've spent too many afternoons walking into a cafe with my laptop only to find no outlets and one tiny table. If I can get this right for UCLA and Santa Monica first, it should generalize anywhere.",
+      },
+    ],
+
+    // Full TikTok post URLs. Day labels come from the order.
+    tiktoks: [
+      {
+        day: 1,
+        url: "https://www.tiktok.com/@mooselocksin/photo/7685279464602832158",
+      },
+    ],
   },
 
   projects: [

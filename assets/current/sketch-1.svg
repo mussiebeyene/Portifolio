@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260" role="img" aria-label="Sketch placeholder">
+  <rect width="400" height="260" fill="#ececec" />
+  <g fill="none" stroke="#111" stroke-width="1.5">
+    <rect x="40" y="34" width="320" height="192" />
+    <path d="M40 74h320" />
+    <path d="M70 110h120M70 138h90M70 166h110" />
+    <rect x="228" y="106" width="104" height="76" />
+  </g>
+  <text x="200" y="248" text-anchor="middle" font-family="Courier, monospace" font-size="11" fill="#6b6b6b">
+    replace with your sketch
+  </text>
+</svg>

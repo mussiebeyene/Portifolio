@@ -6,8 +6,14 @@ const page = document.getElementById("page");
 const socials = document.getElementById("socials");
 const nameEl = document.getElementById("name");
 const roleEl = document.getElementById("role");
+const now = document.getElementById("now");
+const lightbox = document.getElementById("lightbox");
+const lightboxImg = document.getElementById("lightboxImg");
 
 const views = new Set(["landing", "menu", "about", "resume", "projects"]);
+
+let tiktokIndex = 0;
+let commitCache = null;
 
 function currentView() {
   const hash = (location.hash || "#/").replace(/^#\/?/, "");
@@ -129,6 +135,289 @@ function projectsHtml() {
   `;
 }
 
+function relativeTime(value) {
+  // Date-only strings parse as UTC, which reads a day off in western zones.
+  const local = /^\d{4}-\d{2}-\d{2}$/.test(value) ? `${value}T00:00:00` : value;
+  const then = new Date(local);
+  if (Number.isNaN(then.getTime())) return "";
+  const days = Math.round((Date.now() - then.getTime()) / 86400000);
+  if (days <= 0) return "today";
+  if (days === 1) return "yesterday";
+  if (days < 30) return `${days} days ago`;
+  const months = Math.round(days / 30);
+  if (months < 12) return `${months} mo ago`;
+  return `${Math.round(months / 12)} yr ago`;
+}
+
+function tiktokId(url) {
+  // Photo posts (slideshows) use /photo/ but embed under the same id.
+  const match = String(url).match(/\/(?:video|photo)\/(\d+)/);
+  return match ? match[1] : "";
+}
+
+function lockHtml() {
+  const milestones = content.current.milestones || [];
+  const done = milestones.filter((m) => m.done).length;
+  const total = milestones.length;
+  const pct = total ? done / total : 0;
+  const bodyTop = 60;
+  const bodyHeight = 80;
+  const fillHeight = bodyHeight * pct;
+  const unlocked = total > 0 && done === total;
+
+  return `
+    <div class="lock-wrap">
+      <svg class="lock ${unlocked ? "is-unlocked" : ""}" viewBox="0 0 120 150" role="img"
+           aria-label="${done} of ${total} milestones complete">
+        <defs>
+          <clipPath id="lockBodyClip">
+            <rect x="20" y="${bodyTop}" width="80" height="${bodyHeight}" rx="12" />
+          </clipPath>
+        </defs>
+        <path class="lock-shackle" d="M42 ${bodyTop} V42 a18 18 0 0 1 36 0 V${bodyTop}" />
+        <rect class="lock-fill" x="20" y="${bodyTop + bodyHeight - fillHeight}"
+              width="80" height="${fillHeight}" clip-path="url(#lockBodyClip)" />
+        <rect class="lock-body" x="20" y="${bodyTop}" width="80" height="${bodyHeight}" rx="12" />
+        <circle class="lock-keyhole" cx="60" cy="94" r="7" />
+        <path class="lock-keyhole" d="M60 101 V112" />
+      </svg>
+      <p class="lock-count">${done} / ${total}</p>
+      <ul class="lock-list">
+        ${milestones
+          .map(
+            (m) =>
+              `<li class="${m.done ? "is-done" : ""}">${escapeHtml(m.label)}</li>`
+          )
+          .join("")}
+      </ul>
+    </div>
+  `;
+}
+
+function tiktokHtml() {
+  const posts = content.current.tiktoks || [];
+
+  if (!posts.length) {
+    return `
+      <div class="tiktok">
+        <p class="tiktok-day">DAY —</p>
+        <div class="tiktok-frame is-empty">
+          <p>Add TikTok links in<br /><code>js/content.js</code></p>
+        </div>
+        <p class="tiktok-caption">Watch day in the life on TikTok</p>
+      </div>
+    `;
+  }
+
+  const index = Math.min(tiktokIndex, posts.length - 1);
+  const post = posts[index];
+  const id = tiktokId(post.url);
+  const day = post.day ?? index + 1;
+
+  return `
+    <div class="tiktok">
+      <p class="tiktok-day">DAY ${escapeHtml(day)}</p>
+      <div class="tiktok-frame">
+        ${
+          id
+            ? `<iframe src="https://www.tiktok.com/embed/v2/${id}" title="Day ${escapeHtml(day)} TikTok"
+                 allow="encrypted-media; fullscreen" loading="lazy"></iframe>`
+            : `<p class="tiktok-bad">Couldn't read that TikTok URL. Use the full post link ending in /video/&lt;id&gt; or /photo/&lt;id&gt;.</p>`
+        }
+      </div>
+      <div class="tiktok-row">
+        <button type="button" data-tiktok="prev" aria-label="Previous day"
+          ${posts.length < 2 ? "disabled" : ""}>&#9664;</button>
+        <span class="tiktok-count">${index + 1} / ${posts.length}</span>
+        <button type="button" data-tiktok="next" aria-label="Next day"
+          ${posts.length < 2 ? "disabled" : ""}>&#9654;</button>
+      </div>
+      <a class="tiktok-caption" href="${escapeHtml(post.url)}" target="_blank" rel="noopener noreferrer">
+        Watch day in the life on TikTok
+      </a>
+    </div>
+  `;
+}
+
+function journalHtml() {
+  const entries = content.current.journal || [];
+  if (!entries.length) return "";
+
+  const cards = entries
+    .map(
+      (entry) => `
+        <article class="journal-entry">
+          <p class="journal-date">${escapeHtml(entry.date)} · ${escapeHtml(relativeTime(entry.date))}</p>
+          <h4>${escapeHtml(entry.title)}</h4>
+          <p class="journal-text">${escapeHtml(entry.text)}</p>
+        </article>`
+    )
+    .join("");
+
+  return `
+    <h3 class="progress-heading">Daily Journal</h3>
+    <div class="journal-grid">${cards}</div>
+  `;
+}
+
+function feedEntryHtml(entry) {
+  const when = relativeTime(entry.date);
+
+  if (entry.type === "commit") {
+    return `
+      <li class="feed-item">
+        <a class="feed-sha" href="${escapeHtml(entry.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(entry.sha)}</a>
+        <p class="feed-text">${escapeHtml(entry.text)}</p>
+        <span class="feed-when">${escapeHtml(when)}</span>
+      </li>
+    `;
+  }
+
+  return `
+    <li class="feed-item is-note">
+      <span class="feed-sha">note</span>
+      <p class="feed-text">${escapeHtml(entry.text)}</p>
+      <span class="feed-when">${escapeHtml(when)}</span>
+    </li>
+  `;
+}
+
+function noteEntries() {
+  return (content.current.notes || []).map((note) => ({
+    type: "note",
+    date: note.date,
+    text: note.text,
+  }));
+}
+
+function renderFeed(entries, message) {
+  const list = now.querySelector(".feed-list");
+  const status = now.querySelector(".feed-status");
+  if (!list) return;
+
+  list.innerHTML = entries.map(feedEntryHtml).join("");
+  if (status) status.textContent = message || "";
+}
+
+async function loadFeed() {
+  const repo = content.current.repo;
+  const notes = noteEntries();
+
+  if (commitCache) {
+    renderFeed(
+      [...commitCache, ...notes].sort((a, b) => new Date(b.date) - new Date(a.date)),
+      ""
+    );
+    return;
+  }
+
+  renderFeed(notes, "Loading commits…");
+
+  try {
+    const response = await fetch(
+      `https://api.github.com/repos/${repo}/commits?per_page=20`,
+      { headers: { Accept: "application/vnd.github+json" } }
+    );
+
+    // A repo with no commits yet answers 409, which isn't a failure.
+    if (response.status === 409) {
+      commitCache = [];
+      renderFeed(notes, "No commits pushed yet.");
+      return;
+    }
+
+    if (!response.ok) throw new Error(`GitHub returned ${response.status}`);
+
+    const data = await response.json();
+    commitCache = data.map((item) => ({
+      type: "commit",
+      date: item.commit.author.date,
+      text: item.commit.message.split("\n")[0],
+      sha: item.sha.slice(0, 7),
+      url: item.html_url,
+    }));
+
+    if (currentView() !== "menu") return;
+    renderFeed(
+      [...commitCache, ...notes].sort((a, b) => new Date(b.date) - new Date(a.date)),
+      ""
+    );
+  } catch (error) {
+    if (currentView() !== "menu") return;
+    renderFeed(notes, `Commits unavailable (${error.message}).`);
+  }
+}
+
+function nowHtml() {
+  const project = content.current;
+
+  return `
+    <h2 class="now-heading">What I am currently working on</h2>
+    <h3 class="now-title">${escapeHtml(project.title)}</h3>
+
+    <div class="now-grid">
+      <div class="bracket now-overview">
+        <p class="section-label">Overview</p>
+        <p>${escapeHtml(project.overview)}</p>
+        ${
+          (project.features || []).length
+            ? `<p class="section-label">Features</p>
+               <ul class="now-features">
+                 ${project.features
+                   .map((item) => `<li>${escapeHtml(item)}</li>`)
+                   .join("")}
+               </ul>`
+            : ""
+        }
+        ${
+          (project.stack || []).length
+            ? `<ul class="card-stack now-stack">
+                 ${project.stack
+                   .map((tech) => `<li>${escapeHtml(tech)}</li>`)
+                   .join("")}
+               </ul>`
+            : ""
+        }
+      </div>
+      <div class="now-sketches">
+        ${(project.sketches || [])
+          .map(
+            (sketch) => `
+              <figure class="bracket now-sketch">
+                <button type="button" class="sketch-open" data-sketch="${escapeHtml(sketch.src)}"
+                        aria-label="Enlarge ${escapeHtml(sketch.caption)}">
+                  <img src="${escapeHtml(sketch.src)}" alt="${escapeHtml(sketch.caption)}" />
+                </button>
+                <figcaption>${escapeHtml(sketch.caption)} — click to enlarge</figcaption>
+              </figure>`
+          )
+          .join("")}
+      </div>
+    </div>
+
+    <h3 class="progress-heading">Progress</h3>
+
+    <div class="progress-grid">
+      <div class="feed">
+        <p class="section-label">Feed</p>
+        <ol class="feed-list"></ol>
+        <p class="feed-status"></p>
+      </div>
+      <aside class="progress-side">
+        ${lockHtml()}
+        ${tiktokHtml()}
+      </aside>
+    </div>
+
+    ${journalHtml()}
+  `;
+}
+
+function renderNow() {
+  now.innerHTML = nowHtml();
+  loadFeed();
+}
+
 function render(view) {
   app.className = view === "landing" || view === "menu" ? `view-${view}` : `view-${view} view-page`;
 
@@ -136,14 +425,20 @@ function render(view) {
   const onPage = view === "about" || view === "resume" || view === "projects";
 
   setHidden(tree, !onMenu);
+  setHidden(now, !onMenu);
   setHidden(socials, view === "landing");
   setHidden(backBtn, !onPage);
   setHidden(page, !onPage);
 
   avatarBtn.setAttribute("aria-label", view === "landing" ? "Open menu" : "Back to home");
 
+  window.scrollTo(0, 0);
+
   if (onMenu) {
     requestAnimationFrame(drawTree);
+    renderNow();
+  } else {
+    now.innerHTML = "";
   }
 
   if (view === "about") page.innerHTML = aboutHtml();
@@ -178,12 +473,58 @@ avatarBtn.addEventListener("click", () => {
 
 backBtn.addEventListener("click", () => go("menu"));
 
+document.getElementById("lightboxClose").addEventListener("click", closeLightbox);
+
 tree.querySelectorAll("[data-view]").forEach((button) => {
   button.addEventListener("click", () => go(button.dataset.view));
 });
 
+function openLightbox(src, alt) {
+  lightboxImg.src = src;
+  lightboxImg.alt = alt;
+  lightbox.hidden = false;
+  document.body.style.overflow = "hidden";
+}
+
+function closeLightbox() {
+  lightbox.hidden = true;
+  lightboxImg.removeAttribute("src");
+  document.body.style.overflow = "";
+}
+
+now.addEventListener("click", (event) => {
+  const sketch = event.target.closest("[data-sketch]");
+  if (sketch) {
+    openLightbox(sketch.dataset.sketch, sketch.querySelector("img").alt);
+    return;
+  }
+
+  const button = event.target.closest("[data-tiktok]");
+  if (!button) return;
+
+  const total = (content.current.tiktoks || []).length;
+  if (!total) return;
+
+  const step = button.dataset.tiktok === "next" ? 1 : -1;
+  tiktokIndex = (tiktokIndex + step + total) % total;
+
+  const carousel = now.querySelector(".tiktok");
+  if (carousel) carousel.outerHTML = tiktokHtml();
+});
+
+lightbox.addEventListener("click", (event) => {
+  if (event.target === lightboxImg) return;
+  closeLightbox();
+});
+
 document.addEventListener("keydown", (event) => {
   if (event.key !== "Escape") return;
+
+  if (!lightbox.hidden) {
+    closeLightbox();
+    return;
+  }
+
   const view = currentView();
   if (view === "menu") go("landing");
   if (view === "about" || view === "resume" || view === "projects") go("menu");

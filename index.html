@@ -12,7 +12,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Ethiopic:wght@400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans+Ethiopic:wght@400;500&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="css/styles.css" />
@@ -49,6 +49,13 @@
             <button type="button" data-view="projects">PROJECTS</button>
           </nav>
         </div>
+      </div>
+
+      <section class="now" id="now" hidden aria-label="Currently working on"></section>
+
+      <div class="lightbox" id="lightbox" hidden>
+        <button class="lightbox-close" id="lightboxClose" type="button" aria-label="Close">&times;</button>
+        <img id="lightboxImg" src="" alt="" />
       </div>
 
       <main class="page" id="page" hidden></main>
