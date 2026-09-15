@@ -350,10 +350,16 @@ async function loadFeed() {
 
 function nowHtml() {
   const project = content.current;
+  const repoUrl = project.repo ? `https://github.com/${project.repo}` : "";
+  const title = escapeHtml(project.title);
 
   return `
     <h2 class="now-heading">What I am currently working on</h2>
-    <h3 class="now-title">${escapeHtml(project.title)}</h3>
+    <h3 class="now-title">${
+      repoUrl
+        ? `<a href="${escapeHtml(repoUrl)}" target="_blank" rel="noopener noreferrer">${title}</a>`
+        : title
+    }</h3>
 
     <div class="now-grid">
       <div class="bracket now-overview">
@@ -405,11 +411,11 @@ function nowHtml() {
       </div>
       <aside class="progress-side">
         ${lockHtml()}
-        ${tiktokHtml()}
+        ${journalHtml()}
       </aside>
     </div>
 
-    ${journalHtml()}
+    ${tiktokHtml()}
   `;
 }
 

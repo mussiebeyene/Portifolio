@@ -260,6 +260,17 @@ img {
   text-transform: uppercase;
 }
 
+.now-title a {
+  text-decoration: none;
+  border-bottom: 1px dotted var(--muted);
+  padding-bottom: 3px;
+}
+
+.now-title a:hover {
+  border-bottom-style: solid;
+  border-bottom-color: var(--fg);
+}
+
 .bracket {
   position: relative;
   padding: 18px 26px;
@@ -373,10 +384,8 @@ img {
 }
 
 .progress-grid {
-  /* TikTok's player refuses to render below 325px, so the side column
-     is wide enough to hold it at full size. */
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 360px;
+  grid-template-columns: minmax(0, 1fr) 340px;
   gap: 36px;
   align-items: start;
 }
@@ -455,6 +464,17 @@ a.feed-sha:hover {
   flex-direction: column;
   gap: 28px;
   align-items: center;
+}
+
+/* The journal sits in this column, so it drops to a single stack and
+   loses the standalone heading spacing. */
+.progress-side .progress-heading {
+  margin: 0;
+}
+
+.progress-side .journal-grid {
+  width: 100%;
+  grid-template-columns: 1fr;
 }
 
 .lock-wrap {
@@ -537,6 +557,13 @@ a.feed-sha:hover {
 .tiktok {
   width: 100%;
   text-align: center;
+}
+
+/* Standalone below the progress grid. TikTok's player refuses to render
+   below 325px, so keep it near its natural width instead of full bleed. */
+.now > .tiktok {
+  max-width: 360px;
+  margin: 64px auto 0;
 }
 
 .tiktok-day {

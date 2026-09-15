@@ -33,7 +33,7 @@ const content = {
   current: {
     // "owner/repo" — the feed pulls live commits from here.
     repo: "mussiebeyene/PutYouOn",
-    title: "AI Cafe Finder",
+    title: "PutYouOn",
     overview:
       "Find cafes based on your vibe, work setup, noise level, seating, outlets, WiFi, and what your friends recommend.",
 
@@ -53,7 +53,7 @@ const content = {
 
     // The lock fills as these get marked done. Flip done to true as you go.
     milestones: [
-      { label: "Scope and sketches", done: false },
+      { label: "Scope and sketches", done: true },
       { label: "Cafe data model", done: false },
       { label: "Maps + filters", done: false },
       { label: "Preference matching", done: false },
