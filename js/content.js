@@ -73,6 +73,11 @@ const content = {
     // Placeholder entries — rewrite these in your own voice.
     journal: [
       {
+        date: "2026-09-16",
+        title: "My day today",
+        text: "It was actuallly a pretty productive day. I didn't finish everything I wanted to but still got a lot done. Overall a good day, plus I'm seeing my girlfriend today!!",
+      },
+      {
         date: "2026-09-15",
         title: "First day at CodePath",
         text: "I got insanely humbled by the amount of knowledge and practice I need to catch up to. It's going to be a long journey but hopefully its worth it. We stay strong and keep grinding! God bless!",
@@ -96,6 +101,10 @@ const content = {
 
     // Full TikTok post URLs. Day labels come from the order.
     tiktoks: [
+      {
+        day: 5,
+        url: "",
+      },
       {
         day: 4,
         url: "https://www.tiktok.com/@mooselocksin/photo/7685673591832153374",
