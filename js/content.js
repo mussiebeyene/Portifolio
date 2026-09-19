@@ -73,6 +73,11 @@ const content = {
     // Placeholder entries — rewrite these in your own voice.
     journal: [
       {
+        date: "2026-09-18",
+        title: "My day today",
+        text: "By far my most productive and active day so far. I got things done! And i will keep it up!! One thing I learnt today is the concept of momentum in life. The more you do something, a task, a habit during the day the momentum builds up and it'll be easier to do other tasks afterwards. Start with a small task, wake up a little earlier, go out on a walk read '1' page of a book, etc. Just move the mass of your body to some velocity and you'll have enough momentum to carry the day.",
+      },
+      {
         date: "2026-09-16",
         title: "My day today",
         text: "It was actuallly a pretty productive day. I didn't finish everything I wanted to but still got a lot done. Overall a good day, plus I'm seeing my girlfriend today!!",
@@ -103,7 +108,7 @@ const content = {
     tiktoks: [
       {
         day: 5,
-        url: "",
+        url: "https://www.tiktok.com/@mooselocksin/video/7686388800502664462",
       },
       {
         day: 4,
