@@ -1,1 +1,1 @@
-[![Architecture diagram of mussiebeyene/portifolio](https://gitdiagram.com/mussiebeyene/portifolio/diagram.png)](https://gitdiagram.com/mussiebeyene/portifolio?utm_source=readme&utm_medium=picture)
+[![Architecture diagram](https://gitdiagram.com/diagram-badge.svg)](https://gitdiagram.com/mussiebeyene/portifolio?utm_source=readme&utm_medium=badge)
